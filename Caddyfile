@@ -35,7 +35,7 @@
 				header_up X-Real-IP {http.request.header.X-Real-IP}
 		}
 
-		reverse_proxy ${$APP_HOST} {
+		reverse_proxy {$APP_HOST} {
 				header_up Host {http.reverse_proxy.upstream.hostport}
 				header_up X-Real-IP {http.request.header.X-Real-IP}
 		}
