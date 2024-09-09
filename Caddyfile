@@ -1,4 +1,22 @@
-{$BASE_URL} {
+{
+	admin off
+	persist_config off
+	auto_https: off
+
+	log {
+		format console
+	}
+
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:{$PORT} {
+	log {
+		format console
+	}
+
 	route {
 		file_server * {
 				root /app/uploads
@@ -6,18 +24,18 @@
 		}
 
 		@api path /api/*
-		reverse_proxy @api http://server:8080 {
+		reverse_proxy @api {$SERVER_HOST} {
 				header_up Host {http.reverse_proxy.upstream.hostport}
 				header_up X-Real-IP {http.request.header.X-Real-IP}
 		}
 
 		@docs path /docs*
-		reverse_proxy @docs http://server:8080 {
+		reverse_proxy @docs {$SERVER_HOST} {
 				header_up Host {http.reverse_proxy.upstream.hostport}
 				header_up X-Real-IP {http.request.header.X-Real-IP}
 		}
 
-		reverse_proxy http://app:8080 {
+		reverse_proxy ${$APP_HOST} {
 				header_up Host {http.reverse_proxy.upstream.hostport}
 				header_up X-Real-IP {http.request.header.X-Real-IP}
 		}
